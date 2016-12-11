@@ -2,13 +2,23 @@ body {
   display: flex;
 }
 
+h1{
+  font-size: 30px}
+
+p {font-size: 20px}
+
 #main-map {
   height: 500px;
   width: 800px;
 }
 
-* {
-  font-family: system, -apple-system, BlinkMacSystemFont,
-        "Helvetica Neue", "Lucida Grande";
-
+#data-point{
+  border: 1px black solid;
+  background-color: lavender;
 }
+
+#data-point p{
+  margin: 0;
+  font-weight: normal;
+}
+
