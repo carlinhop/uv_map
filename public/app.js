@@ -2,7 +2,14 @@ var app = function(){
 
   var heatMapData = [];
   var div = document.getElementById("main-map");
-  var zoomLevel = 7;
+  var zoomLevel = 10;
+
+
+  var pointToLatLng = function(point){
+    
+    return {location: new google.maps.LatLng(point.location.latitude,point.location.longitude), weight: point.data}
+
+  };
 
 
   var makeRequest = function(url, callback){
@@ -23,29 +30,35 @@ var app = function(){
     var jsonString = this.responseText;
     point = JSON.parse(jsonString);
     heatMapData.push(pointToLatLng(point));
-    //console.log(heatMapData);
+
+    var heatmap = new google.maps.visualization.HeatmapLayer({
+      data: heatMapData    
+    });
+
+    heatmap.setMap(map.googleMap);
+    console.log(heatMapData);
     
     
   };
 
-  var pointToLatLng = function(point){
-    console.log(point);
-    return {location: new google.maps.LatLng(point.location.latitude,point.location.longitude), weight: point.data}
 
-  };
 
 
   map = new MapWrapper(div, {lat: 40.7, lng: -74.2}, zoomLevel);
 
+  map.googleMap.addListener("click", function(e){
+  
+   var geoPointLat = e.latLng.lat().toFixed(1); 
+   var geoPointLng = e.latLng.lng().toFixed(1);
 
-  makeRequest(  "http://api.openweathermap.org/v3/uvi/40.7,-74.2/current.json?appid=29fa680d5253a0d0a26c7743e70b5bcf", requestComplete);
-  makeRequest( "http://api.openweathermap.org/v3/uvi/25,-80/current.json?appid=29fa680d5253a0d0a26c7743e70b5bcf", requestComplete);
+    makeRequest(  "http://api.openweathermap.org/v3/uvi/"+geoPointLat+","+geoPointLng+"/current.json?appid=29fa680d5253a0d0a26c7743e70b5bcf", requestComplete);
 
-  var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: heatMapData    
+
+
+
   });
 
-  heatmap.setMap(map.googleMap);
+
 
 
 
